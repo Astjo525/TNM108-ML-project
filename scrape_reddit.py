@@ -3,6 +3,7 @@ import pandas as pd
 import datetime as dt
 
 from variables import *
+
 #exec(open('scrape_reddit.py').read())
 
 reddit = praw.Reddit(client_id=client_id, \
