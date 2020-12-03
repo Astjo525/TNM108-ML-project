@@ -25,12 +25,12 @@ tfidf = TfidfVec.fit_transform(rq_list)
 
 theta = []
 for i in range(len(rq_list) - 1):
-    val = cosine_similarity(tfidf[14], tfidf[i])
+    val = cosine_similarity(tfidf[-1], tfidf[i])
 
     theta.append(math.acos(val))
 
 best_angle = min(theta)
 print("Your question: " + q)
-print("Answer: " + rq_list[theta.index(best_angle)])
+print("Similar question: " + rq_list[theta.index(best_angle)])
 print("Index: " + str(theta.index(best_angle)))
 
