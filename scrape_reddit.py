@@ -19,6 +19,7 @@ topics_dict = { "title":[],
                 "replies":[] }
 excel_dict = { "title":[],
                 "replies":[] }
+answer_dict = {"answers": []}
 
 # Go over each question
 for submission in top_subreddit:
@@ -38,6 +39,7 @@ for submission in top_subreddit:
         # Check that comment hasn't been removed and isn't a comment by the moderator
         if (comment.author is not None and comment.distinguished is None):
             answerList.append(comment.body)
+            answer_dict["answers"].append([comment.body])
             excel_dict["title"].append(submission.title)
             excel_dict["replies"].append(comment.body)
             
