@@ -4,7 +4,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import math
 from pre_proc_func import pre_process
-from scrape_reddit import topics_data
 
 def minimum_cosine(query, data):
     query = pre_process(query)

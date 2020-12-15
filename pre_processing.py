@@ -8,8 +8,9 @@ from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 wordnet_lemmatizer = WordNetLemmatizer()
 from pre_proc_func import pre_process
-from scrape_reddit import topics_data
 #exec(open('pre_processing.py').read())
+
+topics_data = pd.read_pickle('dataset.pkl')
 
 # Collect the data
 reddit_questions = topics_data['title']
