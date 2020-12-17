@@ -1,5 +1,0 @@
-client_id='UD7hx5TdqmE0qQ'
-client_secret='Edr-WcBg0VzAScH3-E78chiReEvghg'
-user_agent='qa-scraper'
-username='AdLongjumping1561'
-password='Pier4ever'
