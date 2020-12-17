@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import math
-from pre_proc_func import pre_process
+from pre_processing import pre_process
 
 def minimum_cosine(query, data):
     query = pre_process(query)
@@ -22,7 +22,7 @@ def minimum_cosine(query, data):
 
         theta.append(math.acos(val))
     
-    #find the minimum angle and the index of that text from data and return it
+    #Find the minimum angle and the index of that text from data and return it
     min_angle = min(theta)
     data_index = theta.index(min_angle)
 

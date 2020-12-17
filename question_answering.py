@@ -1,31 +1,38 @@
 import pandas as pd
-from pre_processing import r_questions, r_replies
+import pickle
+
 from tfidf import minimum_cosine
 
 # Reload scripts
 import tfidf
 import pre_processing
-import pre_proc_func
+import data_processing
 import importlib
 importlib.reload(tfidf)
 importlib.reload(pre_processing)
-importlib.reload(pre_proc_func)
+importlib.reload(data_processing)
 
-## RELOAD question_answering in command prompt
-# import question_answering
-# import importlib
-# importlib.reload(question_answering)
-
+# Run the code with this command
 #exec(open('question_answering.py').read())  
 
 topics_data = pd.read_pickle('dataset.pkl')
 
-query = "How did Ronald Reagan win the Election?"
-query = "Did George Bush steal an election?"
-query = "Why were women denied basic legal rights?"
-#query = "How many british monarch died in 2020?"
-#query = "How do the states handle people convicted for marijuana after legalization?"
-#query = "Is it possible to invade Russia?"
+with open('processed_data.pkl', 'rb') as filehandle:
+    r_questions = pickle.load(filehandle)
+    r_replies = pickle.load(filehandle)
+
+queries = ["How did Ronald Reagan win the Election?",
+            "Did George Bush steal an election?",
+            "Why were women denied basic legal rights?",
+            "How many british monarch died in 2020?",
+            "How do the states handle people convicted for marijuana after legalization?",
+            "Is it possible to invade Russia?"
+            "Was George Floyd murdered?",
+            "Why is tear gas not used in warfare, but on civilians?",
+            "Why is America, a country developed by immigrants, anti-immigration?"]
+
+# Decide which of the queries should be submitted
+query = queries[0]
 
 # Find similar question
 [min_angle, query_index] = minimum_cosine(query, r_questions)

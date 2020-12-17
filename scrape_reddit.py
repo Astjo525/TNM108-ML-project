@@ -6,8 +6,6 @@ from summa.summarizer import summarize
 
 from variables import *
 
-#exec(open('scrape_reddit.py').read())
-
 #Using praw to scrape Reddit, with our app
 reddit = praw.Reddit(client_id=client_id, \
                      client_secret=client_secret, \
@@ -15,16 +13,14 @@ reddit = praw.Reddit(client_id=client_id, \
                      username=username, \
                      password=password)
 
-#scrape the 100 first questions 
+#Scrape the 100 first questions 
 numb_questions = 100
 
 #Scrape the subreddit AskHistorians with the 100 top questions of all time.
 top_subreddit = reddit.subreddit('AskHistorians').top("all", limit=numb_questions)
+
 topics_dict = { "title":[],
                 "replies":[] }
-excel_dict = { "title":[],
-                "replies":[] }
-answer_dict = {"answers": []}
 
 # Go over each question
 for submission in top_subreddit:
@@ -38,20 +34,17 @@ for submission in top_subreddit:
     # Go over answers
     answerList = []
     commentIndex = 0
-
     for comment in submission.comments:
 
+        #Summarize comment in 150 words
         summarizedAnswer = summarize(comment.body, words = 150)
 
         # Check that comment hasn't been removed and isn't a comment by the moderator
         if (comment.author is not None and comment.distinguished is None and len(summarizedAnswer) > 0):
             answerList.append(summarizedAnswer)
 
+            #Check if question has five answers
             if(len(answerList) == 5):
-                answer_dict["answers"].append([summarizedAnswer])
-                excel_dict["title"].append(submission.title)
-                excel_dict["replies"].append(summarizedAnswer)
-
                 # Add question to dictionary
                 topics_dict["title"].append(submission.title)
 
@@ -60,12 +53,9 @@ for submission in top_subreddit:
                 break 
             
 
-# Create data frame with questions/answers
+# Create DataFrame with questions/answers
 topics_data = pd.DataFrame(topics_dict)
 
+# Save DataFrame to .pkl file
 topics_data.to_pickle('dataset.pkl')
-
-# Create Excel sheet with data
-excel_data = pd.DataFrame(excel_dict)
-excel_data.to_excel('history.xlsx', index=True)  
 

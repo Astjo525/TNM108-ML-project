@@ -1,38 +1,32 @@
-import pandas as pd
 import string
 import nltk
-from gensim.parsing.preprocessing import remove_stopwords
-from nltk.tokenize import sent_tokenize, word_tokenize
-from scrape_reddit import topics_data,excel_data
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
+from gensim.parsing.preprocessing import remove_stopwords
+
 wordnet_lemmatizer = WordNetLemmatizer()
-from pre_proc_func import pre_process
-#exec(open('pre_processing.py').read())
 
-topics_data = pd.read_pickle('dataset.pkl')
+#For lemmatization
+def get_wordnet_pos(word):
+    #tag is the POS tag that the lemmantize() accepts
+    tag = nltk.pos_tag([word])[0][1][0].upper()
+    tag_dict = {"J": wordnet.ADJ,
+                "N": wordnet.NOUN,
+                "V": wordnet.VERB,
+                "R": wordnet.ADV}
+    #Return the tag if it is in tag_dict else the POS tag "noun"
+    return tag_dict.get(tag, wordnet.NOUN)
 
-# Collect the data
-reddit_questions = topics_data['title']
-reddit_replies = topics_data['replies']
-
-# Create lists for questions and replies
-r_questions = []
-r_replies = []
-
-# Remove stopwords, punctuation, lowercase, remove links and lemmantize for the questions 
-for i in reddit_questions:
-    lemmatized_output = pre_process(i)
-    r_questions.append(lemmatized_output)
-
-# Remove stopwords, punctuation, lowercase, remove links and lemmantize for the replies
-for replies in reddit_replies:
-    answer_list = []
-    for i in replies:
-        lemmatized_output = pre_process(i)
-        answer_list.append(lemmatized_output)
-    r_replies.append(answer_list)
-
-
-
-
+#Pre-processing
+def pre_process(i):
+    i = remove_stopwords(i) 
+    i = i.lower()
+    #Replace each punctuation with a empty string
+    for c in string.punctuation:  
+        i= i.replace(c,"")
+    #Remove the links from the sentences
+    i = ' '.join(x for x in i.split() if not x.startswith('http'))
+    #Split the string into the words and use lemmatize to stem the word
+    word_list = nltk.word_tokenize(i)
+    lemmatized_output = ' '.join([wordnet_lemmatizer.lemmatize(w,get_wordnet_pos(w)) for w in word_list])
+    return lemmatized_output
